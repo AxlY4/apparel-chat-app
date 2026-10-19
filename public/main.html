@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background-color: #0f172a;
+      color: #f8fafc;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Top Navigation Bar */
+    .navbar {
+      background-color: #1e293b;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+
+    .brand {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #38bdf8;
+    }
+
+    .btn-logout {
+      background-color: #ef4444;
+      color: white;
+      border: none;
+      padding: 0.5rem 1.2rem;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.2s;
+      text-decoration: none;
+    }
+
+    .btn-logout:hover {
+      background-color: #dc2626;
+    }
+
+    /* Main Dashboard Layout */
+    .container {
+      max-width: 800px;
+      margin: 3rem auto;
+      padding: 0 1.5rem;
+      text-align: center;
+      flex-grow: 1;
+    }
+
+    .welcome-card {
+      background-color: #1e293b;
+      padding: 3rem 2rem;
+      border-radius: 12px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+      border: 1px solid #334155;
+    }
+
+    .welcome-card h1 {
+      color: #38bdf8;
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }
+
+    .welcome-card p {
+      color: #94a3b8;
+      font-size: 1.1rem;
+      line-height: 1.6;
+    }
+
+    .status-badge {
+      display: inline-block;
+      margin-top: 1.5rem;
+      background-color: rgba(56, 189, 248, 0.1);
+      color: #38bdf8;
+      padding: 0.4rem 1rem;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      border: 1px solid rgba(56, 189, 248, 0.3);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header / Navigation -->
+  <header class="navbar">
+    <div class="brand">AppDashboard</div>
+    <form action="/logout" method="POST" style="margin: 0;">
+      <button type="submit" class="btn-logout">Sign Out</button>
+    </form>
+  </header>
+
+  <!-- Main Content Area -->
+  <main class="container">
+    <div class="welcome-card">
+      <h1>Welcome Back! 🎉</h1>
+      <p>You have successfully logged in to your account.</p>
+      <div class="status-badge">Status: Authenticated</div>
+    </div>
+  </main>
+
+</body>
+</html>
