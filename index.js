@@ -1,4 +1,6 @@
 import express from "express";
+import http from 'http';
+import { Server } from 'socket.io';
 import path from "path";
 import { fileURLToPath } from "url";
 
@@ -6,6 +8,8 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
+const server = http.createServer(app);
+const io = new Server(server);
 const port = process.env.PORT || 3000;
 const users = []; 
 
@@ -54,12 +58,23 @@ app.post("/login", (req, res) => {
     return res.redirect("/login?error=wrongpassword");
   }
 
-  res.redirect("/main");
+  res.redirect("/main?username=" + encodeURIComponent(existingUser.username));
 });
 
-// Middleware to decode form data sent via POST requests
+// Socket.io real-time connection
+io.on('connection', (socket) => {
+  console.log('A user connected via WebSocket!');
 
-app.listen(port, () => {
+  socket.on('chat message', (msg) => {
+    io.emit('chat message', msg); // Broadcasts message to everyone
+  });
+
+  socket.on('disconnect', () => {
+    console.log('A user disconnected.');
+  });
+});
+
+// Change app.listen to server.listen so sockets work!
+server.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
-

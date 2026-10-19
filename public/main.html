@@ -1,118 +1,263 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dashboard</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Live Chat App</title>
   <style>
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
     }
 
     body {
-      background-color: #0f172a;
-      color: #f8fafc;
-      min-height: 100vh;
+      background-color: #0d1117;
+      color: #c9d1d9;
       display: flex;
-      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      padding: 20px;
     }
 
-    /* Top Navigation Bar */
-    .navbar {
-      background-color: #1e293b;
-      padding: 1rem 2rem;
+    /* Main Chat Container */
+    .chat-card {
+      width: 100%;
+      max-width: 700px;
+      height: 85vh;
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 16px;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
+      overflow: hidden;
+    }
+
+    /* Header */
+    .chat-header {
+      padding: 16px 24px;
+      background: #21262d;
+      border-bottom: 1px solid #30363d;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
     }
 
-    .brand {
-      font-size: 1.25rem;
-      font-weight: 700;
-      color: #38bdf8;
+    .chat-header h2 {
+      font-size: 1.1rem;
+      color: #f0f6fc;
+      display: flex;
+      align-items: center;
+      gap: 10px;
     }
 
-    .btn-logout {
-      background-color: #ef4444;
-      color: white;
+    .status-dot {
+      width: 10px;
+      height: 10px;
+      background-color: #238636;
+      border-radius: 50%;
+      display: inline-block;
+      box-shadow: 0 0 8px #238636;
+    }
+
+    .signout-btn {
+      background: #da3633;
+      color: #ffffff;
       border: none;
-      padding: 0.5rem 1.2rem;
-      border-radius: 6px;
-      font-size: 0.9rem;
+      padding: 8px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.85rem;
+      transition: background 0.2s ease;
+    }
+
+    .signout-btn:hover {
+      background: #b82a28;
+    }
+
+    /* Message Area */
+    .chat-body {
+      flex: 1;
+      padding: 20px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      background: #0d1117;
+    }
+
+    .message {
+      max-width: 75%;
+      padding: 12px 16px;
+      border-radius: 14px;
+      font-size: 0.95rem;
+      line-height: 1.4;
+      word-wrap: break-word;
+      animation: fadeIn 0.15s ease-in-out;
+    }
+
+    /* System Notice */
+    .message.system {
+      align-self: center;
+      background: rgba(110, 118, 129, 0.15);
+      color: #8b949e;
+      font-size: 0.8rem;
+      border-radius: 20px;
+      padding: 6px 14px;
+    }
+
+    /* Sent Messages (My Messages) */
+    .message.sent {
+      align-self: flex-end;
+      background: #1f6feb;
+      color: #ffffff;
+      border-bottom-right-radius: 2px;
+    }
+
+    /* Received Messages (Friend's Messages) */
+    .message.received {
+      align-self: flex-start;
+      background: #21262d;
+      color: #f0f6fc;
+      border: 1px solid #30363d;
+      border-bottom-left-radius: 2px;
+    }
+
+    /* Input Footer */
+    .chat-footer {
+      padding: 16px 20px;
+      background: #161b22;
+      border-top: 1px solid #30363d;
+    }
+
+    .chat-form {
+      display: flex;
+      gap: 12px;
+    }
+
+    .chat-input {
+      flex: 1;
+      background: #0d1117;
+      border: 1px solid #30363d;
+      border-radius: 10px;
+      padding: 12px 16px;
+      color: #f0f6fc;
+      font-size: 0.95rem;
+      outline: none;
+      transition: border-color 0.2s ease;
+    }
+
+    .chat-input:focus {
+      border-color: #58a6ff;
+    }
+
+    .send-btn {
+      background: #238636;
+      color: #ffffff;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 10px;
       font-weight: 600;
       cursor: pointer;
-      transition: background-color 0.2s;
-      text-decoration: none;
+      transition: background 0.2s ease;
     }
 
-    .btn-logout:hover {
-      background-color: #dc2626;
+    .send-btn:hover {
+      background: #2ea043;
     }
 
-    /* Main Dashboard Layout */
-    .container {
-      max-width: 800px;
-      margin: 3rem auto;
-      padding: 0 1.5rem;
-      text-align: center;
-      flex-grow: 1;
-    }
-
-    .welcome-card {
-      background-color: #1e293b;
-      padding: 3rem 2rem;
-      border-radius: 12px;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
-      border: 1px solid #334155;
-    }
-
-    .welcome-card h1 {
-      color: #38bdf8;
-      font-size: 2rem;
-      margin-bottom: 1rem;
-    }
-
-    .welcome-card p {
-      color: #94a3b8;
-      font-size: 1.1rem;
-      line-height: 1.6;
-    }
-
-    .status-badge {
-      display: inline-block;
-      margin-top: 1.5rem;
-      background-color: rgba(56, 189, 248, 0.1);
-      color: #38bdf8;
-      padding: 0.4rem 1rem;
-      border-radius: 20px;
-      font-size: 0.85rem;
-      font-weight: 600;
-      border: 1px solid rgba(56, 189, 248, 0.3);
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
     }
   </style>
 </head>
 <body>
 
-  <!-- Header / Navigation -->
-  <header class="navbar">
-    <div class="brand">AppDashboard</div>
-    <form action="/logout" method="POST" style="margin: 0;">
-      <button type="submit" class="btn-logout">Sign Out</button>
-    </form>
-  </header>
-
-  <!-- Main Content Area -->
-  <main class="container">
-    <div class="welcome-card">
-      <h1>Welcome Back! 🎉</h1>
-      <p>You have successfully logged in to your account.</p>
-      <div class="status-badge">Status: Authenticated</div>
+  <div class="chat-card">
+    <!-- Header -->
+    <div class="chat-header">
+      <h2><span class="status-dot"></span> Live Chatroom</h2>
+      <form action="/logout" method="POST" style="margin: 0;">
+        <button type="submit" class="signout-btn">Sign Out</button>
+      </form>
     </div>
-  </main>
 
+    <!-- Message Display Container -->
+    <div class="chat-body" id="chatMessages">
+      <div class="message system">Connected to real-time chat. Start messaging!</div>
+    </div>
+
+    <!-- Input Box -->
+    <div class="chat-footer">
+      <form id="chatForm" class="chat-form">
+        <input 
+          type="text" 
+          id="messageInput" 
+          class="chat-input" 
+          placeholder="Type a message..." 
+          autocomplete="off" 
+          required 
+        />
+        <button type="submit" class="send-btn">Send</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Socket.io Library (Automatically provided by Express backend) -->
+  <script src="/socket.io/socket.io.js"></script>
+  
+<script>
+  const socket = io();
+
+  const chatForm = document.getElementById('chatForm');
+  const messageInput = document.getElementById('messageInput');
+  const chatMessages = document.getElementById('chatMessages');
+
+  // Grab username from the URL query parameters (e.g., /main?username=John)
+  const urlParams = new URLSearchParams(window.location.search);
+  const username = urlParams.get('username') || 'Anonymous';
+
+  // 1. Handle sending a message
+  chatForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const text = messageInput.value.trim();
+
+    if (text) {
+      // Emit both the text and the username
+      socket.emit('chat message', {
+        username: username,
+        text: text,
+        senderId: socket.id
+      });
+      messageInput.value = '';
+    }
+  });
+
+  // 2. Listen for incoming broadcasts from backend
+  socket.on('chat message', (data) => {
+    const msgDiv = document.createElement('div');
+    
+    const text = typeof data === 'string' ? data : data.text;
+    const senderName = typeof data === 'object' ? data.username : 'Unknown';
+    const senderId = typeof data === 'object' ? data.senderId : null;
+
+    // Style bubble depending on whether it's yours or your friend's
+     if (senderId && senderId === socket.id) {
+      msgDiv.className = 'message sent';
+      msgDiv.innerHTML = `<span style="font-size: 0.7rem; opacity: 0.7; display: block; margin-bottom: 2px; font-weight: 400;">You</span>${text}`;
+    } else {
+      msgDiv.className = 'message received';
+      msgDiv.innerHTML = `<span style="font-size: 0.7rem; color: #8b949e; display: block; margin-bottom: 2px; font-weight: 400;">${senderName}</span>${text}`;
+    }
+
+    chatMessages.appendChild(msgDiv);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+  });
+</script>
 </body>
 </html>
